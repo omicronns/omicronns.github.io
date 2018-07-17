@@ -12,31 +12,61 @@
     </head>
     <body>
         <form>
-            <img style="display:none" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTsEbEB4kEMHt3WJ13HpZE16hJ3iKrE8ugnErvyln7oNPDma48U" crossorigin="anonymous"/>
+            <input type="radio" name="host" id="adamczyk" checked> Adamczyk<br>
+            <input type="radio" name="host" id="holecka"> Holecka<br>
+            <input type="radio" name="host" id="ziemiec"> Ziemiec<br>
+            <br>
+            <img id="adamczyk_jpg" style="display:none" src="images/adamczyk.jpg" crossorigin="anonymous"/>
+            <img id="holecka_jpg" style="display:none" src="images/holecka.jpg" crossorigin="anonymous"/>
+            <img id="ziemiec_jpg" style="display:none" src="images/ziemiec.jpg" crossorigin="anonymous"/>
             <input type="text" id="inp"/>
-            <button type="submit">Save</button>
         </form>
-        <canvas id="canvas" />
+        <br>
+        <canvas id="canvas"/>
     </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
-        var canvas = document.getElementById('canvas'),
-        ctx = canvas.getContext('2d');
-        canvas.width = $('img').width();
-        canvas.crossOrigin = "Anonymous";
-        canvas.height = $('img').height();
-        ctx.drawImage($('img').get(0), 0, 0);
-        ctx.font = "36pt Verdana";
-        $(document).on('input','#inp',function(){
+        var image = function() {
+            if (document.getElementById("adamczyk").checked) {
+                return $('img#adamczyk_jpg');
+            }
+            else if (document.getElementById("holecka").checked) {
+                return $('img#holecka_jpg');
+            }
+            else {
+                return $('img#ziemiec_jpg');
+            }
+        }
+
+        var redraw = function() {
+            let img = image();
+            
+            canvas.width = img.width();
+            canvas.crossOrigin = "Anonymous";
+            canvas.height = img.height();
+
             //redraw image
             ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage($('img').get(0), 0, 0);
+            ctx.drawImage(img.get(0), 0, 0);
             //refill text
             ctx.fillStyle = "red";
             ctx.fillText($(this).val(),40,80);
-        });
-        $('button').click(function(){
-            console.log(ctx.getImageData(50, 50, 100, 100));
-        });
+
+            canvas.width = img.width();
+            canvas.crossOrigin = "Anonymous";
+            canvas.height = img.height();
+        };
+
+        var canvas = document.getElementById('canvas');
+
+        ctx = canvas.getContext('2d');
+        ctx.font = "36pt Verdana";
+
+        redraw();
+
+        $(document).on('input','#inp', redraw);
+        document.getElementById('adamczyk').onclick = redraw;
+        document.getElementById('holecka').onclick = redraw;
+        document.getElementById('ziemiec').onclick = redraw;
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </html>
