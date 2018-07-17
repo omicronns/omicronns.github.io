@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-
-<html lang="en">
     <head>
         <meta charset="utf-8"/>
         <title>
@@ -12,72 +8,73 @@
     </head>
     <body>
         <form>
-            <input type="radio" name="host" id="adamczyk" checked> Adamczyk<br>
+            <input type="radio" name="host" id="adamczyk"> Adamczyk<br>
             <input type="radio" name="host" id="holecka"> Holecka<br>
             <input type="radio" name="host" id="ziemiec"> Ziemiec<br>
             <br>
             <img id="adamczyk_jpg" style="display:none" src="images/adamczyk.jpg" crossorigin="anonymous"/>
             <img id="holecka_jpg" style="display:none" src="images/holecka.jpg" crossorigin="anonymous"/>
             <img id="ziemiec_jpg" style="display:none" src="images/ziemiec.jpg" crossorigin="anonymous"/>
-            <input type="text" id="inp"/>
+            <input type="text" id="inp">
         </form>
         <br>
-        <canvas id="canvas"/>
+        <canvas id="canvas">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script>
+            let image = function() {
+                if (document.getElementById("adamczyk").checked) {
+                    let img = $('img#adamczyk_jpg');
+                    return {
+                        img: img,
+                        pos: { x: img.width() * 0.2, y: img.height() * 0.88},
+                        font: "24pt Verdana",
+                    };
+                }
+                else if (document.getElementById("holecka").checked) {
+                    let img = $('img#holecka_jpg');
+                    return {
+                        img: img,
+                        pos: { x: img.width() * 0.2, y: img.height() * 0.85},
+                        font: "36pt Verdana",
+                    };
+                }
+                else {
+                    let img = $('img#ziemiec_jpg');
+                    return {
+                        img: img,
+                        pos: { x: img.width() * 0.2, y: img.height() * 0.88},
+                        font: "24pt Verdana",
+                    };
+                }
+            }
+    
+            let redraw = function() {
+                let img = image();
+                
+                canvas.width = img.img.width();
+                canvas.height = img.img.height();
+                canvas.crossOrigin = "Anonymous";
+    
+                ctx.font = img.font;
+    
+                //redraw image
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img.img.get(0), 0, 0);
+                //refill text
+                ctx.fillStyle = "white";
+                ctx.fillText(document.getElementById('inp').value, img.pos.x, img.pos.y);
+            };
+    
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+    
+            $(document).on('input','#inp', redraw);
+            document.getElementById('adamczyk').onchange = redraw;
+            document.getElementById('holecka').onchange = redraw;
+            document.getElementById('ziemiec').onchange = redraw;
+            document.getElementById('adamczyk').checked = true;
+    
+            redraw();
+        </script>
     </body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script>
-        let image = function() {
-            if (document.getElementById("adamczyk").checked) {
-                let img = $('img#adamczyk_jpg');
-                return {
-                    img: img,
-                    pos: { x: img.width() * 0.2, y: img.height() * 0.88},
-                    font: "24pt Verdana",
-                };
-            }
-            else if (document.getElementById("holecka").checked) {
-                let img = $('img#holecka_jpg');
-                return {
-                    img: img,
-                    pos: { x: img.width() * 0.2, y: img.height() * 0.85},
-                    font: "36pt Verdana",
-                };
-            }
-            else {
-                let img = $('img#ziemiec_jpg');
-                return {
-                    img: img,
-                    pos: { x: img.width() * 0.2, y: img.height() * 0.88},
-                    font: "24pt Verdana",
-                };
-            }
-        }
-
-        let redraw = function() {
-            let img = image();
-            
-            canvas.width = img.img.width();
-            canvas.crossOrigin = "Anonymous";
-            canvas.height = img.img.height();
-
-            ctx.font = img.font;
-
-            //redraw image
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img.img.get(0), 0, 0);
-            //refill text
-            ctx.fillStyle = "white";
-            ctx.fillText(document.getElementById('inp').value, img.pos.x, img.pos.y);
-        };
-
-        var canvas = document.getElementById('canvas');
-        var ctx = canvas.getContext('2d');
-
-        $(document).on('input','#inp', redraw);
-        document.getElementById('adamczyk').onchange = redraw;
-        document.getElementById('holecka').onchange = redraw;
-        document.getElementById('ziemiec').onchange = redraw;
-
-        redraw();
-    </script>
 </html>
